@@ -9,17 +9,12 @@ export default class ClickOutside extends Component {
 
   constructor(props) {
     super(props)
-    this.getContainer = this.getContainer.bind(this)
     this.isTouch = false
-  }
-
-  getContainer(ref) {
-    this.container = ref
   }
 
   render() {
     const { children, onClickOutside, exceptions, ...props } = this.props
-    return <div {...props} ref={this.getContainer}>{children}</div>
+    return <div {...props} ref={ref => this.container = ref}>{children}</div>
   }
 
   componentDidMount() {
