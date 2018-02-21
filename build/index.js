@@ -12,6 +12,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
@@ -25,64 +29,54 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var ClickOutside = function (_Component) {
   _inherits(ClickOutside, _Component);
 
-  function ClickOutside() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
+  function ClickOutside(props) {
     _classCallCheck(this, ClickOutside);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    var _this = _possibleConstructorReturn(this, (ClickOutside.__proto__ || Object.getPrototypeOf(ClickOutside)).call(this, props));
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ClickOutside.__proto__ || Object.getPrototypeOf(ClickOutside)).call.apply(_ref, [this].concat(args))), _this), _this.handle = function (e) {
-      var _this$props = _this.props,
-          onClickOutside = _this$props.onClickOutside,
-          exceptions = _this$props.exceptions;
-
-
-      var onException = false;
-      if (exceptions) {
-        onException = exceptions.some(function (ref) {
-          return ref && ref.contains(e.target);
-        });
-      }
+    _this.handle = function (e) {
+      if (e.type === 'touchend') _this.isTouch = true;
+      if (e.type === 'click' && _this.isTouch) return;
+      var onClickOutside = _this.props.onClickOutside;
 
       var el = _this.container;
-      if (!el.contains(e.target) && !onException) {
-        onClickOutside(e);
-      }
-    }, _temp), _possibleConstructorReturn(_this, _ret);
+      if (!el.contains(e.target)) onClickOutside(e);
+    };
+
+    _this.getContainer = _this.getContainer.bind(_this);
+    _this.isTouch = false;
+    return _this;
   }
 
   _createClass(ClickOutside, [{
+    key: 'getContainer',
+    value: function getContainer(ref) {
+      this.container = ref;
+    }
+  }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
-
       var _props = this.props,
           children = _props.children,
           onClickOutside = _props.onClickOutside,
-          exceptions = _props.exceptions,
-          props = _objectWithoutProperties(_props, ['children', 'onClickOutside', 'exceptions']);
+          props = _objectWithoutProperties(_props, ['children', 'onClickOutside']);
 
       return _react2.default.createElement(
         'div',
-        _extends({}, props, { ref: function ref(_ref2) {
-            return _this2.container = _ref2;
-          } }),
+        _extends({}, props, { ref: this.getContainer }),
         children
       );
     }
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
+      document.addEventListener('touchend', this.handle, true);
       document.addEventListener('click', this.handle, true);
     }
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
+      document.removeEventListener('touchend', this.handle, true);
       document.removeEventListener('click', this.handle, true);
     }
   }]);
@@ -91,7 +85,6 @@ var ClickOutside = function (_Component) {
 }(_react.Component);
 
 ClickOutside.propTypes = {
-  onClickOutside: _react.PropTypes.func.isRequired,
-  exceptions: _react.PropTypes.array
+  onClickOutside: _propTypes2.default.func.isRequired
 };
 exports.default = ClickOutside;
