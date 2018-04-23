@@ -11,9 +11,9 @@ $ npm install folkapp/react-click-outside
 
 ## Props
 
-ClickOutside takes to props:
+ClickOutside takes two props:
 - `onClickOutside` (*required*): function that closes the `<ClickOutside />` element
-- `exceptions`: an array of references that forces to execute the `onClickOutside` prop (ie. the element that opens it in the first place)
+- `exceptions`: an array of references on which we don't want the click outside event to be triggered
 
 ## Example
 
